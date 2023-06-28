@@ -1,7 +1,7 @@
-const canvasSize = Math.floor(500);
+const canvasSize = Math.floor(720);
 const gridSize = 3;
 const cellSize = canvasSize / gridSize;
-const zoom = 200;
+const zoom = 50;
 const themecolors = [
     [0, 0, 0],
     [255, 255, 255],
@@ -18,3 +18,5 @@ const constraints = {
 }
 
 const emptyCellId = gridSize * gridSize - 1;
+
+let clicky;

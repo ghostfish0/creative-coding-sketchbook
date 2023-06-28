@@ -1,16 +1,16 @@
 function preload() {
     videoSource = createCapture(constraints); 
+    soundFormats('wav');
+    clicky = loadSound('../global/assets/soundfx/mixkit-interface-click-1126.wav');
 }
 
 function setup() {
-    videoSource.hide();
     createCanvas(canvasSize, canvasSize);
     background(themecolors[0]);
     fill(themecolors[0]);
     strokeWeight(0);
-
+    videoSource.hide();
     addCells();
-
 }
 
 function draw() {
@@ -23,21 +23,7 @@ function draw() {
     }
     drawCells();
     
-    // filter(GRAY);
-}
-
-function addCells() {
-    for(let i = 0; i < gridSize * gridSize; i++) 
-        cells.push(new Cell(i));
-    shuffle(cells, true);
-}
-    
-function drawCells() {
-    for(let i = 0; i < gridSize; i++) {
-        for(let j = 0; j < gridSize; j++) {
-            cells[i * gridSize + j].show(i * cellSize, j * cellSize);
-        }
-    }
+    filter(GRAY);
 }
 
 class Cell {
@@ -65,11 +51,24 @@ class Cell {
         image(crop2, x, y);
     }
 }
-
 function mousePressed() {
     let i = floor(mouseX / cellSize);
     let j = floor(mouseY / cellSize);
     slide(j, i);
+}
+
+function addCells() {
+    for(let i = 0; i < gridSize * gridSize; i++) 
+        cells.push(new Cell(i));
+    shuffle(cells, true);
+}
+    
+function drawCells() {
+    for(let i = 0; i < gridSize; i++) {
+        for(let j = 0; j < gridSize; j++) {
+            cells[i * gridSize + j].show(i * cellSize, j * cellSize);
+        }
+    }
 }
 
 function isAdjacent(a, b, c, d) {
@@ -82,8 +81,8 @@ function slide(i, j) {
     let emptyRow = Math.floor(empty / gridSize); 
 
     if (isAdjacent(i, j, emptyCol, emptyRow)) {
-        console.log("swap!");
         [cells[empty], cells[i + j * gridSize]] = [cells[i + j * gridSize], cells[empty]]; 
+        clicky.play(0.15);
     }
 }
 
