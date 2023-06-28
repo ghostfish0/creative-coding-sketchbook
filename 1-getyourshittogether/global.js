@@ -1,11 +1,13 @@
-const canvasSize = 500;
+const canvasSize = Math.floor(500);
 const gridSize = 3;
 const cellSize = canvasSize / gridSize;
+const zoom = 200;
 const themecolors = [
     [0, 0, 0],
     [255, 255, 255],
 ]
-
+const minres = 0.05;
+const maxres = 0.3;
 let cells = [];
 const constraints = {
     video: {
@@ -15,4 +17,4 @@ const constraints = {
     audio: false
 }
 
-const emptyCellId = 5;
+const emptyCellId = gridSize * gridSize - 1;
