@@ -60,5 +60,5 @@ body {
 
   /* This centers our sketch vertically. */
   align-items: center;
-  background-color: #000;
+  background-color: rgb(30, 30, 30);
 }
