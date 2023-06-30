@@ -51,11 +51,6 @@ class Cell {
         image(crop2, x, y);
     }
 }
-function mousePressed() {
-    let i = floor(mouseX / cellSize);
-    let j = floor(mouseY / cellSize);
-    slide(j, i);
-}
 
 function addCells() {
     for(let i = 0; i < gridSize * gridSize; i++) 
@@ -73,6 +68,12 @@ function drawCells() {
 
 function isAdjacent(a, b, c, d) {
     return ((b == d && abs(a - c) == 1) || (a == c && (abs(b - d) == 1)));
+}
+
+function mousePressed() {
+    let i = gridSize - floor(mouseX / cellSize) - 1;
+    let j = floor(mouseY / cellSize);
+    slide(j, i);
 }
 
 function slide(i, j) {

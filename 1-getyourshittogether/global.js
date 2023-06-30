@@ -3,7 +3,7 @@ const gridSize = 3;
 const cellSize = canvasSize / gridSize;
 const zoom = 50;
 const themecolors = [
-    [30, 30, 30],
+    [15, 15, 15],
     [255, 255, 255],
 ]
 const minres = 0.05;
