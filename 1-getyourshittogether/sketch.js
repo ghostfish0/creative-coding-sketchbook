@@ -9,6 +9,7 @@ function setup() {
     background(themecolors[0]);
     fill(themecolors[0]);
     strokeWeight(0);
+    frameRate(15);
     videoSource.hide();
     addCells();
 }
@@ -44,9 +45,8 @@ class Cell {
             rect(x, y, cellSize);
             return;
         }
-        let crop2 = createImage(cellSize, cellSize);
-        crop2.copy(crop, this.x, this.y, cellSize, cellSize, 0, 0, cellSize, cellSize);
-        crop2.resize(this.res, 0);
+        let crop2 = createImage(this.res, this.res);
+        crop2.copy(crop, this.x, this.y, cellSize, cellSize, 0, 0, this.res, this.res);
         crop2.resize(cellSize, 0);
         image(crop2, x, y);
     }
