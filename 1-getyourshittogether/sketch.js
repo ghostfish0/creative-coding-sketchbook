@@ -1,29 +1,33 @@
 function preload() {
-    videoSource = createCapture(constraints); 
     soundFormats('wav');
     clicky = loadSound('../global/assets/soundfx/mixkit-interface-click-1126.wav');
+
 }
+
 
 function setup() {
     createCanvas(canvasSize, canvasSize);
+    frameRate(15);
+    
     background(themecolors[0]);
     fill(themecolors[0]);
-    strokeWeight(0);
-    frameRate(15);
+    noStroke();
+    
+
+    videoSource = createCapture(constraints); 
     videoSource.hide();
-    addCells();
+    waitFor(_ => videoSource.loadedmetadata === true)
+        .then(() => {
+            revCellSize = (videoSource.height - 2 * zoom) / gridSize;
+            addCells();
+            loop();
+        });
+
+    noLoop();
 }
 
 function draw() {
-    crop = createImage(canvasSize, canvasSize);
-    if (videoSource.width > videoSource.height) {
-        crop.copy(videoSource, (videoSource.width - videoSource.height) / 2 + zoom, zoom, videoSource.height - zoom, videoSource.height - zoom, 0, 0, canvasSize, canvasSize);
-    }
-    if (videoSource.height > videoSource.width) {
-        crop.copy(videoSource, (videoSource.height - videoSource.width) / 2, 0, videoSource.width, videoSource.width, 0, 0, canvasSize, canvasSize);
-    }
     drawCells();
-    
     filter(GRAY);
 }
 
@@ -31,8 +35,8 @@ class Cell {
     constructor(id) {
         let i = Math.floor(id / gridSize);
         let j = id % gridSize;
-        this.x = i * cellSize;
-        this.y = j * cellSize;
+        this.x = i * revCellSize + zoom;
+        this.y = j * revCellSize + (videoSource.width - videoSource.height) / 2 + zoom;
         this.id = id;
         this.res = cellSize * random(minres, maxres);
     }
@@ -46,7 +50,7 @@ class Cell {
             return;
         }
         let crop2 = createImage(this.res, this.res);
-        crop2.copy(crop, this.x, this.y, cellSize, cellSize, 0, 0, this.res, this.res);
+        crop2.copy(videoSource, this.x, this.y, revCellSize, revCellSize, 0, 0, this.res, this.res);
         crop2.resize(cellSize, 0);
         image(crop2, x, y);
     }
@@ -62,6 +66,7 @@ function drawCells() {
     for(let i = 0; i < gridSize; i++) {
         for(let j = 0; j < gridSize; j++) {
             cells[i * gridSize + j].show(i * cellSize, j * cellSize);
+            console.log(i, j, gridSize);
         }
     }
 }

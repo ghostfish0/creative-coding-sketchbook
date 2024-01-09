@@ -20,3 +20,14 @@ const constraints = {
 const emptyCellId = gridSize * gridSize - 1;
 
 let clicky;
+let revCellSize;
+
+function waitFor(conditionFunction) {
+
+  const poll = resolve => {
+    if(conditionFunction()) resolve();
+    else setTimeout(_ => poll(resolve), 400);
+  }
+
+  return new Promise(poll);
+}
