@@ -1,13 +1,12 @@
 const canvasSize = Math.floor(720);
-const gridSize = 3;
+const gridSize = 4;
 const cellSize = canvasSize / gridSize;
 const zoom = 100;
 const themecolors = [
     [15, 15, 15],
     [255, 255, 255],
 ]
-const minres = 0.05;
-const maxres = 1;
+// const minres = 0.05;
 let cells = [];
 const constraints = {
     video: {
@@ -17,7 +16,7 @@ const constraints = {
     audio: false
 }
 
-const emptyCellId = gridSize * gridSize - 1;
+const emptyCellId = gridSize - 1;
 
 let clicky;
 let revCellSize;

@@ -1,0 +1,33 @@
+public void settings() {
+    size(200, 200);
+    noSmooth();
+    randomSeed(12);
+}
+
+void setup() {
+    noStroke();
+    background(theme[0]);
+}
+
+void mousePressed() {
+  noLoop();
+}
+
+void mouseReleased() {
+  loop();
+}
+
+void draw() {
+  float yoff = 0;
+  for (int y = 0; y < canvasHeight; y++) {
+    float xoff = 0;
+    for(int x = 0; x < canvasWidth; x++) {
+      int index = (x + y + canvasWidth) * 4;
+      float r = noise(xoff, yoff) * 255;
+      xoff += inc;
+      fill(random(255));
+      rect(x * scl, y * scl, scl, scl);
+    }
+    yoff += inc;
+  }
+}

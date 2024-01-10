@@ -1,0 +1,15 @@
+static final float inc = 0.01;
+static final float scl = 20.0;
+static final int canvasWidth = 200;  
+static final int canvasHeight = 200;  
+static final int cols = floor(canvasWidth / scl);
+static final int rows = floor(canvasHeight / scl);
+
+int[] theme = {
+    // color(200),
+    // color(0),
+    // color(0),
+    color(0),
+    color(255, 0, 0),
+    color(255, 204, 0),
+};
