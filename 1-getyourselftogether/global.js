@@ -1,6 +1,8 @@
-const canvasSize = Math.floor(720);
+const canvasWidth = 640; 
+const canvasHeight = 480;
 const gridSize = 4;
-const cellSize = canvasSize / gridSize;
+const cellHeight = canvasHeight / gridSize;
+const cellWidth = canvasWidth / gridSize;
 const zoom = 100;
 const themecolors = [
     [15, 15, 15],

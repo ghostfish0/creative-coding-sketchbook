@@ -7,31 +7,27 @@ function preload() {
 
 
 function setup() {
-    createCanvas(canvasSize, canvasSize);
-    frameRate(15);
+    createCanvas(canvasWidth, canvasHeight);
     
     background(themecolors[0]);
     fill(themecolors[0]);
     noStroke();
     
-    
     videoSource = createCapture(constraints); 
     videoSource.hide();
     waitFor(_ => videoSource.loadedmetadata === true)
     .then(() => {
-        revCellSize = (videoSource.height - 2 * zoom) / gridSize;
         addCells();
         shuffling();
         loop();
     });
-    
     noLoop();
 }
 
 function draw() {
     drawCells();
-    // filter(GRAY);
 }
+
 function keyPressed() {
     if (key === " ") {
         loop();
@@ -43,29 +39,31 @@ function keyPressed() {
 
 class Cell {
     constructor(id) {
-        let i = Math.floor(id / gridSize);
-        let j = id % gridSize;
-        this.x = i * revCellSize + zoom;
-        this.y = j * revCellSize + (videoSource.width - videoSource.height) / 2 + zoom;
+        let i = id % gridSize;
+        let j = floor(id / gridSize);
+        this.x = j * cellWidth;
+        this.y = i * cellHeight;
         this.id = id;
+        console.log(i, j, this.x, this.y);
     }
     
     show(x, y) {
-        // return;
         if (this.id == emptyCellId) {
-            rect(x, y, cellSize);
+            rect(x, y, cellWidth, cellHeight);
             return;
         }
-        // let crop2 = createImage(cellSize, cellSize);
-        let crop2 = createImage(cellSize, cellSize);
-        crop2.copy(videoSource, this.x, this.y, 
-            revCellSize, revCellSize, 
-            0, 0, 
-            cellSize, cellSize);
-        crop2.resize(cellSize, 0);
-        image(crop2, x, y);
-        // textAlign(CENTER, CENTER);
-        // text(this.id, x + 100, y + 100);
+    
+        push();
+        copy(videoSource, this.x, this.y, 
+            cellWidth, cellHeight, 
+            x, y, 
+            cellWidth, cellHeight);
+
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text(this.i, x + cellWidth / 2 - 10, y + 100);
+        text(this.j, x + cellWidth / 2 + 10, y + 100);
+        pop();
     }
 }
 
@@ -103,8 +101,8 @@ function shuffling() {
 function drawCells() {
     for(let i = 0; i < gridSize; i++) {
         for(let j = 0; j < gridSize; j++) {
-                if (cells[i * gridSize + j] == undefined) continue;
-                cells[i * gridSize + j].show(i * cellSize, j * cellSize);
+                if (cells[i * gridSize + j] == undefined) continue;  
+                cells[i * gridSize + j].show(i * cellWidth, j * cellHeight);
         }
     }
 }
@@ -114,19 +112,21 @@ function isAdjacent(a, b, c, d) {
 }
 
 function mousePressed() {
-    let i = gridSize - floor(mouseX / cellSize) - 1;
-    let j = floor(mouseY / cellSize);
-    slide(j, i);
+    console.log(mouseX, mouseY)
+    let i = gridSize - floor(mouseX / cellWidth) - 1;
+    let j = floor(mouseY / cellHeight);
+    slide(i, j);
 }
 
 function slide(i, j) {
     let empty = findEmtpy();
-    let emptyCol = empty % gridSize; 
-    let emptyRow = Math.floor(empty / gridSize); 
+    let emptyRow = empty % gridSize; 
+    let emptyCol = Math.floor(empty / gridSize); 
+    console.log(i, j, emptyRow, emptyCol);
     
     if (isAdjacent(i, j, emptyCol, emptyRow)) {
-        [cells[empty], cells[i + j * gridSize]] = [cells[i + j * gridSize], cells[empty]]; 
-        clicky.play(0.15);
+        [cells[empty], cells[i * gridSize + j]] = [cells[i * gridSize + j], cells[empty]]; 
+        // clicky.play(0.15);
     }
 }
 
